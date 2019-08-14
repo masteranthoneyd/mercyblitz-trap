@@ -1,3 +1,4 @@
+import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -8,10 +9,12 @@ import java.util.Map;
  */
 public class Trap011_NumberCache {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         trap1();
 
         trap2();
+
+        trap3();
     }
 
     private static void trap1() {
@@ -43,5 +46,22 @@ public class Trap011_NumberCache {
 
     private static void print(Object object) {
         System.out.print(object + " ");
+    }
+
+    private static void trap3() throws Exception {
+        Integer a = Integer.parseInt("10");
+        Integer b = Integer.valueOf(10);
+        Integer c = 10;
+        changeValue(a, 100);
+        changeValue(b, 200);
+        changeValue(c, 300);
+
+        System.out.printf("%d %d %d", a, b, c);
+    }
+
+    private static void changeValue(Integer i, int value) throws Exception {
+        Field field = Integer.class.getDeclaredField("value");
+        field.setAccessible(true);
+        field.set(i, value);
     }
 }
